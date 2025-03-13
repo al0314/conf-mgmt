@@ -1,0 +1,14 @@
+- name: Basic Ansible playbook
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Print a Message
+      debug:
+        msg: "Hello World"
+    
+    - name: Update apt cache
+      
+      apt:
+        update_cache: true
+      become: true
+        
