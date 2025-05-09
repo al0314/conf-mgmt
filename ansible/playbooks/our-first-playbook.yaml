@@ -1,14 +1,11 @@
 - name: Basic Ansible playbook
   hosts: localhost
+  gather_facts: false
   connection: local
+  vars_files: 
+    - ../group_vars/dev
   tasks:
     - name: Print a Message
-      debug:
-        msg: "Hello World"
-    
-    - name: Update apt cache
-      
-      apt:
-        update_cache: true
+      ansible.builtin.debug:
+        var:  app_port
       become: true
-        
