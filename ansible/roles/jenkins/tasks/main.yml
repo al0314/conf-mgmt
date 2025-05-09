@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/jenkins
+- name: Download Jenkins Repo
+  ansible.builtin.get_url:
+    url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+    mode: "0644"
+
+- name: Import a key from a url
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Install Jenkins
+  ansible.builtin.dnf:
+    name: jenkins
+    state: latest
+
+- name: Make sure Jenkins is running
+  ansible.builtin.systemd_service:
+    state: started
+    name: jenkins
+
+- name: Wait for Jenkins to started
+  wait_for:
+    port: "{{ jenkins_port }}"
+    delay: 30
+    timeout: 120
